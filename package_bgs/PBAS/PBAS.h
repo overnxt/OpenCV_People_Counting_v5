@@ -18,8 +18,8 @@
 //
 // //repeat for each frame
 // //make gaussian blur for reducing image noise
-//cv::Mat bluredImage;
-//cv::Mat pbastResult;
+//Mat bluredImage;
+//Mat pbastResult;
 //cv::GaussianBlur(singleFrame, bluredImage, cv::Size(5,5), 1.5);
 // 
 // //process image and receive segmentation in pbasResult
@@ -38,13 +38,18 @@
 #ifndef PBAS_H
 #define PBAS_H
 #include <iostream>
-#include <opencv2/opencv.hpp>
+#include <vector>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+using cv::Mat;
+using cv::Sobel;
+using std::vector;
 class PBAS
 {
 public:
     PBAS();
     ~PBAS();
-	bool process(cv::Mat* input, cv::Mat* output);
+    bool process(Mat* inputImage, Mat* outputImage);
 
 	void setN(int);
 	void setRaute_min(int);
@@ -63,17 +68,9 @@ public:
 	
 
 private:
-	void calculateFeatures(std::vector<cv::Mat>* feature, cv::Mat* inputImage);
-	void checkValid(int *x, int *y);
-	void decisionThresholdRegulator(float* pt, float* meanDistArr);
-	void learningRateRegulator(float* pt, float* meanDist,uchar* isFore);
-	void init(cv::Mat*);
-	void newInitialization();
 
-	cv::Mat meanMinDist;
-	float* meanMinDist_Pt;
-
-
+    Mat meanMinDist;
+    float* meanMinDistPtr;
 
 	int width, height;
 	int chans;
@@ -97,7 +94,7 @@ private:
 	long countOfRandomNumb;
 
 	//pre - initialize the randomNumbers for better performance
-	std::vector<int> randomN, randomMinDist, randomX, randomY, randomT, randomTN;
+    vector<int> randomN, randomMinDist, randomX, randomY, randomT, randomTN;
 	
 	//###################################################################################
 
@@ -108,15 +105,15 @@ private:
 	int runs;
 
 
-	cv::Mat* resultMap;
-	std::vector<cv::Mat> currentFeatures;
+    Mat* resultMap;
+    vector<Mat> currentFeatures;
 
-	std::vector<float*> currentFeaturesM_Pt; 
-	std::vector<uchar*> currentFeaturesC_Pt; 
+    vector<float*> currentFeaturesM_Pt;
+    vector<uchar*> currentFeaturesC_Pt;
 	uchar* resultMap_Pt;
 	
-	std::vector<std::vector<float*> >B_Mag_Pts;
-	std::vector<std::vector<uchar*> >B_Col_Pts;
+    vector<vector<float*> >B_Mag_Pts;
+    vector<vector<uchar*> >B_Col_Pts;
 	
 	double sumMagnitude;
 	double formerMeanMag;
@@ -128,7 +125,7 @@ private:
 	//size of background history B(x_i)
 	int N;
 	// background model
-	std::vector<std::vector<cv::Mat> > backgroundModel;
+    vector<vector<Mat> > backgroundModel;
 	//####################################################################################
 	//####################################################################################
 	//R-Threshhold - Variables
@@ -144,7 +141,7 @@ private:
 	// increasing/decreasing factor for the r-Threshold based on the result of rTreshScale * meanMinDistBackground
 	double R_incdec;
 	
-	cv::Mat actualR; 
+    Mat actualR;
 	float* actualR_Pt; //new pixel-based r-threshhold -> pointer to arrays
 	//#####################################################################################
 	//####################################################################################
@@ -178,12 +175,17 @@ private:
 	double T_dec;
 
 	//holds update rate of current pixel
-	cv::Mat actualT; 
+    Mat actualT;
 	float* actualT_Pt; 
 	
 	//#####################################################################################
+    Mat sobelX, sobelY;
 
-
-	cv::Mat sobelX, sobelY;
+    void calculateFeatures(vector<Mat>* feature, Mat* inputImage);
+    void checkValid(int *x, int *y);
+    void decisionThresholdRegulator(float* pt, float* meanDistArr);
+    void learningRateRegulator(float* pt, float* meanDist,uchar* isFore);
+    void init(Mat*);
+    void newInitialization();
 };
 #endif // PBAS_H

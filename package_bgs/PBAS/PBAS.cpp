@@ -99,15 +99,15 @@ PBAS::~PBAS()
   sobelY.release();
 }
 
-bool PBAS::process(cv::Mat* input, cv::Mat* output)
+bool PBAS::process(cv::Mat* inputImage, cv::Mat* outputImage)
 {
-  if(width != input->cols)
+  if(width != inputImage->cols)
   {
-    width = input->cols;
-    chans = input->channels();
-    height = input->rows;
+    width = inputImage->cols;
+    chans = inputImage->channels();
+    height = inputImage->rows;
 
-    if(input->rows < 1  || input->cols < 1)
+    if(inputImage->rows < 1  || inputImage->cols < 1)
     {
       std::cout << "Error: Occurrence of to small (or empty?) image size in PBAS. STOPPING " << std::endl;
       return false;
@@ -115,12 +115,12 @@ bool PBAS::process(cv::Mat* input, cv::Mat* output)
   }
 
   //iniate the background model
-  init(input);
+  init(inputImage);
 
-  resultMap = new cv::Mat(input->rows,input->cols,CV_8UC1);
+  resultMap = new cv::Mat(inputImage->rows,inputImage->cols,CV_8UC1);
 
   //calculate features
-  calculateFeatures(&currentFeatures, input);
+  calculateFeatures(&currentFeatures, inputImage);
 
   //set sumMagnitude to zero at beginning and then sum up in the loop
   sumMagnitude = 0;
@@ -149,7 +149,7 @@ bool PBAS::process(cv::Mat* input, cv::Mat* output)
       B_Col_Pts.push_back(uT);
     }
 
-    meanMinDist_Pt = meanMinDist.ptr<float>(j);
+    meanMinDistPtr = meanMinDist.ptr<float>(j);
     actualR_Pt = actualR.ptr<float>(j);
     actualT_Pt = actualT.ptr<float>(j);
 
@@ -228,11 +228,11 @@ bool PBAS::process(cv::Mat* input, cv::Mat* output)
         // reasonable minDist could be found -> because of the partly 1/run changing in the running average, we set in the first try meanMinDist to the actual minDist value
         if(runs < N && runs > 2)
         {
-          *meanMinDist_Pt = ((((float)(runs-1)) * (*meanMinDist_Pt)) + (float)minDist) / ((float)runs);
+          *meanMinDistPtr = ((((float)(runs-1)) * (*meanMinDistPtr)) + (float)minDist) / ((float)runs);
         }
         else if(runs < N && runs == 2)
         {
-          *meanMinDist_Pt = (float)minDist;
+          *meanMinDistPtr = (float)minDist;
         }
 
         //1. update model
@@ -251,7 +251,7 @@ bool PBAS::process(cv::Mat* input, cv::Mat* output)
 
             }
 
-            *meanMinDist_Pt = ((((float)(N-1)) * (*meanMinDist_Pt)) + (float)minDist) / ((float)N);
+            *meanMinDistPtr = ((((float)(N-1)) * (*meanMinDistPtr)) + (float)minDist) / ((float)N);
           }
 
           //Update neighboring pixel model
@@ -285,10 +285,10 @@ bool PBAS::process(cv::Mat* input, cv::Mat* output)
       //control loops
       //#######################//#######################//#######################//#######################
       //update R		
-      decisionThresholdRegulator(actualR_Pt,meanMinDist_Pt);
+      decisionThresholdRegulator(actualR_Pt,meanMinDistPtr);
 
       //update T
-      learningRateRegulator(actualT_Pt, meanMinDist_Pt,resultMap_Pt);
+      learningRateRegulator(actualT_Pt, meanMinDistPtr,resultMap_Pt);
 
       //#######################//#######################//#######################//#######################
       //#######################//#######################//#######################//#######################			
@@ -301,13 +301,13 @@ bool PBAS::process(cv::Mat* input, cv::Mat* output)
         ++currentFeaturesC_Pt.at(z);
       }
 
-      ++meanMinDist_Pt;
+      ++meanMinDistPtr;
       ++actualR_Pt;
       ++actualT_Pt;			
     }
   }
 
-  resultMap->copyTo(*output);
+  resultMap->copyTo(*outputImage);
 
   //if there is no foreground -> no magnitudes fount
   //-> initiate some low value to prevent diving through zero
