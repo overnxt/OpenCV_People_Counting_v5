@@ -1,9 +1,12 @@
 #include <iostream>
+#include <memory>
 #include <opencv2/opencv.hpp>
 #include <opencv2/bgsegm.hpp>
 #include "package_bgs/PBAS/PixelBasedAdaptiveSegmenter.h"
 #include "package_tracking/BlobTracking.h"
 #include "package_analysis/VehicleCouting.h"
+using std::unique_ptr;
+using std::make_unique;
 using cv::BackgroundSubtractor;
 using cv::bgsegm::BackgroundSubtractorMOG;
 using cv::bgsegm::createBackgroundSubtractorMOG;
@@ -15,23 +18,20 @@ int main(int argc, char **argv)
   /* Open video file */
   CvCapture *capture = 0;
   capture = cvCaptureFromAVI("dataset/sample2.avi");
-  if(!capture){
+  if(!capture)
+  {
     std::cerr << "Cannot open video!" << std::endl;
     return 1;
   }
   
   /* Background Subtraction Algorithm */
-  IBGS *bgs;
-  bgs = new PixelBasedAdaptiveSegmenter;
-  
-  /* Blob Tracking Algorithm */
+  unique_ptr<IBGS> bgs{make_unique<PixelBasedAdaptiveSegmenter>()};
+   /* Blob Tracking Algorithm */
   cv::Mat img_blob;
-  BlobTracking* blobTracking;
-  blobTracking = new BlobTracking;
+  unique_ptr<BlobTracking> blobTracking{make_unique<BlobTracking>()};
 
   /* Vehicle Counting Algorithm */
-  VehicleCouting* vehicleCouting;
-  vehicleCouting = new VehicleCouting;
+  unique_ptr<VehicleCouting> vehicleCouting{make_unique<VehicleCouting>()};
 
   std::cout << "Press 'q' to quit..." << std::endl;
   int key = 0;
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   Ptr<BackgroundSubtractorMOG> backgroundSuctractor;
   backgroundSuctractor = createBackgroundSubtractorMOG(200, 5, 0.7, 15);
 
-  while(key != 'q')
+  while(1)
   {
     frame = cvQueryFrame(capture);
     if(!frame) break;
@@ -63,13 +63,10 @@ int main(int argc, char **argv)
       vehicleCouting->setTracks(blobTracking->getTracks());
       vehicleCouting->process();
     }
-
-    key = cvWaitKey(24);
+    // Press q to quit the program
+    if (cv::waitKey(24) == 'q')
+        break;
   }
-
-  delete vehicleCouting;
-  delete blobTracking;
-  delete bgs;
 
   cvDestroyAllWindows();
   cvReleaseCapture(&capture);
