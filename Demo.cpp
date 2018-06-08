@@ -1,17 +1,20 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
-
+#include <opencv2/bgsegm.hpp>
 #include "package_bgs/PBAS/PixelBasedAdaptiveSegmenter.h"
 #include "package_tracking/BlobTracking.h"
 #include "package_analysis/VehicleCouting.h"
-
+using cv::BackgroundSubtractor;
+using cv::bgsegm::BackgroundSubtractorMOG;
+using cv::bgsegm::createBackgroundSubtractorMOG;
+using cv::Ptr;
 int main(int argc, char **argv)
 {
   std::cout << "Using OpenCV " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_SUBMINOR_VERSION << std::endl;
 
   /* Open video file */
   CvCapture *capture = 0;
-  capture = cvCaptureFromAVI("dataset/video.avi");
+  capture = cvCaptureFromAVI("dataset/sample2.avi");
   if(!capture){
     std::cerr << "Cannot open video!" << std::endl;
     return 1;
@@ -33,6 +36,10 @@ int main(int argc, char **argv)
   std::cout << "Press 'q' to quit..." << std::endl;
   int key = 0;
   IplImage *frame;
+
+  Ptr<BackgroundSubtractorMOG> backgroundSuctractor;
+  backgroundSuctractor = createBackgroundSubtractorMOG(200, 5, 0.7, 15);
+
   while(key != 'q')
   {
     frame = cvQueryFrame(capture);
@@ -43,8 +50,9 @@ int main(int argc, char **argv)
 
     // bgs->process(...) internally process and show the foreground mask image
     cv::Mat img_mask;
-    bgs->process(img_input, img_mask);
-    
+    //bgs->process(img_input, img_mask);
+    backgroundSuctractor->apply(img_input, img_mask);
+    cv::imshow("BGS", img_mask);
     if(!img_mask.empty())
     {
       // Perform blob tracking
@@ -56,7 +64,7 @@ int main(int argc, char **argv)
       vehicleCouting->process();
     }
 
-    key = cvWaitKey(1);
+    key = cvWaitKey(24);
   }
 
   delete vehicleCouting;
