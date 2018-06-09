@@ -1,4 +1,4 @@
-#include "package_analysis/VehicleCouting.h"
+#include "package_analysis/ObjectCouting.h"
 #include "package_bgs/PBAS/PixelBasedAdaptiveSegmenter.h"
 #include "package_tracking/BlobTracking.h"
 #include <iostream>
@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     unique_ptr<BlobTracking> blobTracking{ make_unique<BlobTracking>() };
 
     /* Vehicle Counting Algorithm */
-    unique_ptr<VehicleCouting> vehicleCouting{ make_unique<VehicleCouting>() };
+    unique_ptr<ObjectCouting> vehicleCouting{ make_unique<ObjectCouting>() };
 
     std::cout << "Press 'q' to quit..." << std::endl;
     int key = 0;

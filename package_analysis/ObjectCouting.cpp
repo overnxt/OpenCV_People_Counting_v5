@@ -1,4 +1,4 @@
-﻿#include "VehicleCouting.h"
+﻿#include "ObjectCouting.h"
 
 namespace FAV1
 {
@@ -45,30 +45,30 @@ namespace FAV1
   }
 }
 
-VehicleCouting::VehicleCouting(): firstTime(true), showOutput(true), key(0), countAB(0), countBA(0), showAB(0)
+ObjectCouting::ObjectCouting(): firstTime(true), showOutput(true), key(0), countAB(0), countBA(0), showAB(0)
 {
   std::cout << "VehicleCouting()" << std::endl;
 }
 
-VehicleCouting::~VehicleCouting()
+ObjectCouting::~ObjectCouting()
 {
   std::cout << "~VehicleCouting()" << std::endl;
 }
 
-void VehicleCouting::setInput(const cv::Mat &i)
+void ObjectCouting::setInput(const cv::Mat &i)
 {
   //i.copyTo(img_input);
   img_input = i;
 }
 
-void VehicleCouting::setTracks(const cvb::CvTracks &t)
+void ObjectCouting::setTracks(const cvb::CvTracks &t)
 {
   tracks = t;
 }
 
-VehiclePosition VehicleCouting::getVehiclePosition(const CvPoint2D64f centroid)
+ObjectPosition ObjectCouting::getVehiclePosition(const CvPoint2D64f centroid)
 {
-  VehiclePosition vehiclePosition = VP_NONE;
+  ObjectPosition vehiclePosition = VP_NONE;
 
   if(laneOrientation == LO_HORIZONTAL)
   {
@@ -103,7 +103,7 @@ VehiclePosition VehicleCouting::getVehiclePosition(const CvPoint2D64f centroid)
   return vehiclePosition;
 }
 
-void VehicleCouting::process()
+void ObjectCouting::process()
 {
   if(img_input.empty())
     return;
@@ -192,10 +192,10 @@ void VehicleCouting::process()
     {
       if(positions.count(id) > 0)
       {
-        std::map<cvb::CvID, VehiclePosition>::iterator it2 = positions.find(id);
-        VehiclePosition old_position = it2->second;
+        std::map<cvb::CvID, ObjectPosition>::iterator it2 = positions.find(id);
+        ObjectPosition old_position = it2->second;
 
-        VehiclePosition current_position = getVehiclePosition(centroid);
+        ObjectPosition current_position = getVehiclePosition(centroid);
 
         if(current_position != old_position)
         {
@@ -210,10 +210,10 @@ void VehicleCouting::process()
       }
       else
       {
-        VehiclePosition vehiclePosition = getVehiclePosition(centroid);
+        ObjectPosition vehiclePosition = getVehiclePosition(centroid);
 
         if(vehiclePosition != VP_NONE)
-          positions.insert(std::pair<cvb::CvID, VehiclePosition>(id,vehiclePosition));
+          positions.insert(std::pair<cvb::CvID, ObjectPosition>(id,vehiclePosition));
       }
     }
     else
@@ -291,7 +291,7 @@ void VehicleCouting::process()
   firstTime = false;
 }
 
-void VehicleCouting::saveConfig()
+void ObjectCouting::saveConfig()
 {
   CvFileStorage* fs = cvOpenFileStorage("config/VehicleCouting.xml", 0, CV_STORAGE_WRITE);
 
@@ -308,7 +308,7 @@ void VehicleCouting::saveConfig()
   cvReleaseFileStorage(&fs);
 }
 
-void VehicleCouting::loadConfig()
+void ObjectCouting::loadConfig()
 {
   CvFileStorage* fs = cvOpenFileStorage("config/VehicleCouting.xml", 0, CV_STORAGE_READ);
 
