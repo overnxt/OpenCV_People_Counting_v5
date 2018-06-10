@@ -1,5 +1,5 @@
-﻿#pragma once
-
+﻿#ifndef IBGS_H
+#define IBGS_H
 #include <cv.h>
 
 class IBGS
@@ -12,3 +12,5 @@ private:
   virtual void saveConfig() = 0;
   virtual void loadConfig() = 0;
 };
+
+#endif // IBGS_H

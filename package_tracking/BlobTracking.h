@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BLOB_TRACKING_H
+#define BLOB_TRACKING_H
 
 #include <iostream>
 #include <opencv2/opencv.hpp>
@@ -29,3 +30,4 @@ public:
   const cvb::CvTracks getTracks();
 };
 
+#endif // BLOB_TRACKING_H

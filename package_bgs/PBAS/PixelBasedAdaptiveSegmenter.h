@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef PIXEL_BASED_ADAPTIVE_SEGMENTER
+#define PIXEL_BASED_ADAPTIVE_SEGMENTER
 
 #include <iostream>
 #include <opencv2/opencv.hpp>
@@ -39,3 +40,5 @@ private:
   void saveConfig();
   void loadConfig();
 };
+
+#endif // PIXEL_BASED_ADAPTIVE_SEGMENTER
