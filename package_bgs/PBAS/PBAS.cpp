@@ -1,6 +1,6 @@
 #include "PBAS.h"
 
-PBAS::PBAS() : N(20), R_lower(18), Raute_min(2), T_lower(2), T_upper(200), R_scale(5), R_incdec(0.05), T_dec(0.05), T_inc(1)
+PBAS::PBAS() : N(20), R_lower(18), R_scale(5),R_incdec(0.05), Raute_min(2), T_inc(1), T_upper(200), T_lower(2),  T_dec(0.05)
 {
   std::cout << "PBAS()" << std::endl;
 
