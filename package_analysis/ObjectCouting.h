@@ -3,11 +3,20 @@
 
 #include <iostream>
 #include <string>
-#include <opencv2/opencv.hpp>
+#include <vector>
+#include <map>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui_c.h>
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv/cv.hpp>
 #include "../package_tracking/cvblob/cvblob.h"
+using std::vector;
+using std::map;
+using cv::Mat;
+using cv::putText;
+using cv::line;
+using cv::circle;
+using cv::waitKey;
 enum LaneOrientation
 {
   LO_NONE       = 0,
@@ -28,11 +37,11 @@ private:
   bool firstTime;
   bool showOutput;
   int key;
-  cv::Mat img_input;
+  Mat img_input;
   cvb::CvTracks tracks;
-  std::map<cvb::CvID, std::vector<CvPoint2D64f> > points;
+  map<cvb::CvID, vector<CvPoint2D64f> > points;
   LaneOrientation laneOrientation;
-  std::map<cvb::CvID, ObjectPosition> positions;
+  map<cvb::CvID, ObjectPosition> positions;
   long countAB;
   long countBA;
   int img_w;
@@ -43,8 +52,8 @@ public:
   ObjectCouting();
   ~ObjectCouting();
 
-  void setInput(const cv::Mat &i);
-  void setTracks(const cvb::CvTracks &t);
+  void setInput(const Mat &imgInput);
+  void setTracks(const cvb::CvTracks &srcTracks);
   void process();
 
 private:

@@ -12,7 +12,7 @@ namespace FAV1
   int startDraw = 0;
   bool roi_defined = false;
   bool use_roi = true;
-  void VehicleCouting_on_mouse(int evt, int x, int y, int flag, void* param)
+  /*void VehicleCouting_on_mouse(int evt, int x, int y, int flag, void* param)
   {
     if(!use_roi)
       return;
@@ -42,7 +42,7 @@ namespace FAV1
       cvShowImage("VehicleCouting", img_input2);
       cvReleaseImage(&img_input2);
     }
-  }
+  }*/
 }
 
 ObjectCouting::ObjectCouting(): firstTime(true), showOutput(true), key(0), countAB(0), countBA(0), showAB(0)
@@ -55,15 +55,15 @@ ObjectCouting::~ObjectCouting()
   std::cout << "~VehicleCouting()" << std::endl;
 }
 
-void ObjectCouting::setInput(const cv::Mat &i)
+void ObjectCouting::setInput(const cv::Mat &imgInput)
 {
   //i.copyTo(img_input);
-  img_input = i;
+  img_input = imgInput;
 }
 
-void ObjectCouting::setTracks(const cvb::CvTracks &t)
+void ObjectCouting::setTracks(const cvb::CvTracks &srcTracks)
 {
-  tracks = t;
+  tracks = srcTracks;
 }
 
 ObjectPosition ObjectCouting::getVehiclePosition(const CvPoint2D64f centroid)
@@ -74,13 +74,13 @@ ObjectPosition ObjectCouting::getVehiclePosition(const CvPoint2D64f centroid)
   {
     if(centroid.x < FAV1::roi_x0)
     {
-      cv::putText(img_input, "STATE: A", cv::Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
+      putText(img_input, "STATE: A", cv::Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
       vehiclePosition = VP_A;
     }
     
     if(centroid.x > FAV1::roi_x0)
     {
-      cv::putText(img_input, "STATE: B", cv::Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
+      putText(img_input, "STATE: B", cv::Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
       vehiclePosition = VP_B;
     }
   }
@@ -89,13 +89,13 @@ ObjectPosition ObjectCouting::getVehiclePosition(const CvPoint2D64f centroid)
   {
     if(centroid.y > FAV1::roi_y0)
     {
-      cv::putText(img_input, "STATE: A", cv::Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
+      putText(img_input, "STATE: A", cv::Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
       vehiclePosition = VP_A;
     }
     
     if(centroid.y < FAV1::roi_y0)
     {
-      cv::putText(img_input, "STATE: B", cv::Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
+      putText(img_input, "STATE: B", cv::Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
       vehiclePosition = VP_B;
     }
   }
@@ -119,12 +119,12 @@ void ObjectCouting::process()
   {
     do
     {
-      cv::putText(img_input, "Please, set the counting line", cv::Point(10,15), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0,0,255));
-      cv::imshow("VehicleCouting", img_input);
-      FAV1::img_input1 = new IplImage(img_input);
+      putText(img_input, "Please, set the counting line", cv::Point(10,15), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0,0,255));
+      imshow("VehicleCouting", img_input);
+      //FAV1::img_input1 = new IplImage(img_input);
       //cvSetMouseCallback("VehicleCouting", FAV1::VehicleCouting_on_mouse, NULL);
-      key = cvWaitKey(0);
-      delete FAV1::img_input1;
+      //key = waitKey(0);
+      //delete FAV1::img_input1;
 
       if(FAV1::roi_defined)
       {
@@ -137,7 +137,7 @@ void ObjectCouting::process()
   }
 
   if(FAV1::use_roi == true && FAV1::roi_defined == true)
-    cv::line(img_input, cv::Point(FAV1::roi_x0,FAV1::roi_y0), cv::Point(FAV1::roi_x1,FAV1::roi_y1), cv::Scalar(0,0,255));
+    line(img_input, cv::Point(FAV1::roi_x0,FAV1::roi_y0), cv::Point(FAV1::roi_x1,FAV1::roi_y1), cv::Scalar(0,0,255));
   
   bool ROI_OK = false;
   
@@ -151,21 +151,21 @@ void ObjectCouting::process()
     if(abs(FAV1::roi_x0 - FAV1::roi_x1) < abs(FAV1::roi_y0 - FAV1::roi_y1))
     {
       if(!firstTime)
-        cv::putText(img_input, "HORIZONTAL", cv::Point(10,15), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
+        putText(img_input, "HORIZONTAL", cv::Point(10,15), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
       laneOrientation = LO_HORIZONTAL;
 
-      cv::putText(img_input, "(A)", cv::Point(FAV1::roi_x0-32,FAV1::roi_y0), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
-      cv::putText(img_input, "(B)", cv::Point(FAV1::roi_x0+12,FAV1::roi_y0), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
+      putText(img_input, "(A)", cv::Point(FAV1::roi_x0-32,FAV1::roi_y0), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
+      putText(img_input, "(B)", cv::Point(FAV1::roi_x0+12,FAV1::roi_y0), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
     }
 
     if(abs(FAV1::roi_x0 - FAV1::roi_x1) > abs(FAV1::roi_y0 - FAV1::roi_y1))
     {
       if(!firstTime)
-        cv::putText(img_input, "VERTICAL", cv::Point(10,15), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
+        putText(img_input, "VERTICAL", cv::Point(10,15), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
       laneOrientation = LO_VERTICAL;
 
-      cv::putText(img_input, "(A)", cv::Point(FAV1::roi_x0,FAV1::roi_y0+22), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
-      cv::putText(img_input, "(B)", cv::Point(FAV1::roi_x0,FAV1::roi_y0-12), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
+      putText(img_input, "(A)", cv::Point(FAV1::roi_x0,FAV1::roi_y0+22), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
+      putText(img_input, "(B)", cv::Point(FAV1::roi_x0,FAV1::roi_y0-12), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255,255,255));
     }
   }
 
@@ -272,18 +272,18 @@ void ObjectCouting::process()
 
   if(showAB == 0)
   {
-    cv::putText(img_input, countABstr, cv::Point(10, img_h - 20), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 255, 255));
-    cv::putText(img_input, countBAstr, cv::Point(10, img_h - 8), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 255, 255));
+    putText(img_input, countABstr, cv::Point(10, img_h - 20), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 100, 0));
+    putText(img_input, countBAstr, cv::Point(10, img_h - 8), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 100, 0));
   }
   
   if(showAB == 1)
-    cv::putText(img_input, countABstr, cv::Point(10, img_h - 8), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 255, 255));
+    putText(img_input, countABstr, cv::Point(10, img_h - 8), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 100, 0));
   
   if(showAB == 2)
-    cv::putText(img_input, countBAstr, cv::Point(10, img_h - 8), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(255, 255, 255));
+    putText(img_input, countBAstr, cv::Point(10, img_h - 8), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 100, 0));
 
   if(showOutput)
-    cv::imshow("VehicleCouting", img_input);
+    imshow("VehicleCouting", img_input);
 
   if(firstTime)
     saveConfig();
