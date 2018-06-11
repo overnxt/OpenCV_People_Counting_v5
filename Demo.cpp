@@ -11,13 +11,15 @@ using cv::bgsegm::BackgroundSubtractorMOG;
 using cv::bgsegm::createBackgroundSubtractorMOG;
 using std::make_unique;
 using std::unique_ptr;
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
+    for (int i{}; i < argc; i++)
+        std::cout << argv[i] << std::endl;
     std::cout << "Using OpenCV " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_SUBMINOR_VERSION << std::endl;
 
     /* Open video file */
     CvCapture* capture = 0;
-    capture = cvCaptureFromAVI("dataset/sample2.avi");
+    capture = cvCaptureFromAVI(argv[1]);
     if (!capture) {
         std::cerr << "Cannot open video!" << std::endl;
         return 1;
@@ -33,7 +35,6 @@ int main(int argc, char** argv)
     unique_ptr<ObjectCouting> vehicleCouting{ make_unique<ObjectCouting>() };
 
     std::cout << "Press 'q' to quit..." << std::endl;
-    int key = 0;
     IplImage* frame;
 
     Ptr<BackgroundSubtractorMOG> backgroundSuctractor;
