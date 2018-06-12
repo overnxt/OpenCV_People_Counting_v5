@@ -1,5 +1,5 @@
 QT -= gui
-
+QT += network
 CONFIG += c++14 console
 CONFIG -= app_bundle
 
@@ -15,24 +15,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    package_bgs/PBAS/PBAS.cpp \
-    package_bgs/PBAS/PixelBasedAdaptiveSegmenter.cpp \
-    package_tracking/cvblob/cvaux.cpp \
-    package_tracking/cvblob/cvblob.cpp \
-    package_tracking/cvblob/cvcolor.cpp \
-    package_tracking/cvblob/cvcontour.cpp \
-    package_tracking/cvblob/cvlabel.cpp \
-    package_tracking/cvblob/cvtrack.cpp \
-    package_tracking/BlobTracking.cpp \
+    backgroundsub_algorithms/PBAS/PBAS.cpp \
+    backgroundsub_algorithms/PBAS/PixelBasedAdaptiveSegmenter.cpp \
+    tracking_algorithms/cvblob/cvaux.cpp \
+    tracking_algorithms/cvblob/cvblob.cpp \
+    tracking_algorithms/cvblob/cvcolor.cpp \
+    tracking_algorithms/cvblob/cvcontour.cpp \
+    tracking_algorithms/cvblob/cvlabel.cpp \
+    tracking_algorithms/cvblob/cvtrack.cpp \
+    tracking_algorithms/BlobTracking.cpp \
     Demo.cpp \
-    package_analysis/ObjectCouting.cpp
+    analysis_algorithms/ObjectCouting.cpp
 
 HEADERS += \
-    package_bgs/PBAS/PBAS.h \
-    package_bgs/PBAS/PixelBasedAdaptiveSegmenter.h \
-    package_bgs/IBGS.h \
-    package_tracking/cvblob/cvblob.h \
-    package_tracking/BlobTracking.h \
-    package_analysis/ObjectCouting.h
+    backgroundsub_algorithms/PBAS/PBAS.h \
+    backgroundsub_algorithms/PBAS/PixelBasedAdaptiveSegmenter.h \
+    backgroundsub_algorithms/IBGS.h \
+    tracking_algorithms/cvblob/cvblob.h \
+    tracking_algorithms/BlobTracking.h \
+    analysis_algorithms/ObjectCouting.h
 PKGCONFIG += opencv3
 CONFIG += link_pkgconfig
