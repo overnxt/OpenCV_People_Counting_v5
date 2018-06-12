@@ -25,7 +25,8 @@ SOURCES += \
     tracking_algorithms/cvblob/cvtrack.cpp \
     tracking_algorithms/BlobTracking.cpp \
     Demo.cpp \
-    analysis_algorithms/ObjectCouting.cpp
+    analysis_algorithms/ObjectCouting.cpp \
+    communication_api/serverapi.cpp
 
 HEADERS += \
     backgroundsub_algorithms/PBAS/PBAS.h \
@@ -33,6 +34,7 @@ HEADERS += \
     backgroundsub_algorithms/IBGS.h \
     tracking_algorithms/cvblob/cvblob.h \
     tracking_algorithms/BlobTracking.h \
-    analysis_algorithms/ObjectCouting.h
+    analysis_algorithms/ObjectCouting.h \
+    communication_api/serverapi.h
 PKGCONFIG += opencv3
 CONFIG += link_pkgconfig
