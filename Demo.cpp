@@ -1,10 +1,12 @@
 #include "analysis_algorithms/ObjectCouting.h"
 #include "backgroundsub_algorithms/PBAS/PixelBasedAdaptiveSegmenter.h"
 #include "tracking_algorithms/BlobTracking.h"
+#include "communication_api/serverapi.h"
 #include <iostream>
 #include <memory>
 #include <opencv2/bgsegm.hpp>
 #include <opencv2/opencv.hpp>
+#include <QCoreApplication>
 using cv::BackgroundSubtractor;
 using cv::VideoCapture;
 using cv::Ptr;
@@ -14,6 +16,7 @@ using std::make_unique;
 using std::unique_ptr;
 int main(int argc, char* argv[])
 {
+    QCoreApplication app(argc, argv);
     for (int i{}; i < argc; i++)
         std::cout << argv[i] << std::endl;
     std::cout << "Using OpenCV " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_SUBMINOR_VERSION << std::endl;
@@ -21,6 +24,8 @@ int main(int argc, char* argv[])
     /* Open video file */
     VideoCapture systemCapture;
     systemCapture.open(argv[1]);
+    ServerApi server;
+    server.login();
     /*capture = cvCaptureFromAVI(argv[1]);
     if (!capture) {
         std::cerr << "Cannot open video!" << std::endl;
@@ -73,6 +78,6 @@ int main(int argc, char* argv[])
 
     cvDestroyAllWindows();
     //cvReleaseCapture(&capture);
-
+    return app.exec();
     return 0;
 }
