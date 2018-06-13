@@ -24,8 +24,6 @@ int main(int argc, char* argv[])
     /* Open video file */
     VideoCapture systemCapture;
     systemCapture.open(argv[1]);
-    ServerApi server;
-    server.login();
     /*capture = cvCaptureFromAVI(argv[1]);
     if (!capture) {
         std::cerr << "Cannot open video!" << std::endl;
