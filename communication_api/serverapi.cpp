@@ -1,7 +1,7 @@
 #include "serverapi.h"
 
 ServerApi::ServerApi()
-    : hostName{"http://localhost/api/v1/checkTicket"},
+    : hostName{"http://localhost"},
       userName{"manager"},
       password{"smb2017"},
       networkManager{new QNetworkAccessManager(this)},
@@ -12,9 +12,17 @@ ServerApi::ServerApi()
     QObject::connect(networkRepliesMapper, SIGNAL(mapped(QString)), this, SLOT(handleLogin(QString)));
 }
 
-void ServerApi::login()
+void ServerApi::updateLatLongBus(int busID, int peopleIn1, int peopleIn2, int peopleOu1, int peopleOu2)
 {
-    QNetworkReply* reply{networkManager->get(QNetworkRequest(QUrl(hostName)))};
+    QByteArray postData;
+    postData.append(QString("busId=%1&").arg(busID));
+    postData.append(QString("peopleOut1=%1&").arg(peopleOu1));
+    postData.append(QString("peopleOut2=%1&").arg(peopleOu2));
+    postData.append(QString("peopleIn1=%1&").arg(peopleIn1));
+    postData.append(QString("peopleIn2=%1").arg(peopleIn2));
+    QNetworkRequest requset(QUrl(hostName + QString("/api/v1/updateBusPosition")));
+    requset.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
+    QNetworkReply* reply{networkManager->post(requset, postData)};
     QString replyID{QString::number(++repliesCount)};
     networkRepliesHashMap->insert(replyID, reply);
     networkRepliesMapper->setMapping(reply, replyID);
@@ -24,7 +32,6 @@ void ServerApi::login()
 
 void ServerApi::handleLogin(QString replyID)
 {
-    cout << "GERRERRE";
     QNetworkReply* reply{networkRepliesHashMap->value(replyID)};
     if (reply->error())
     {
@@ -32,11 +39,6 @@ void ServerApi::handleLogin(QString replyID)
         cout << reply->errorString().toStdString() << endl;
     }
     else
-        cout << ":3" << endl;
+        cout << reply->readAll().toStdString() << endl;
     reply->deleteLater();
-}
-
-void ServerApi::donothing()
-{
-
 }
