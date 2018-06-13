@@ -10,6 +10,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv/cv.hpp>
 #include "../tracking_algorithms/cvblob/cvblob.h"
+#include "../communication_api/serverapi.h"
 using std::vector;
 using std::map;
 using cv::Mat;
@@ -47,7 +48,7 @@ private:
   int img_w;
   int img_h;
   int showAB;
-
+  ServerApi serverApi;
 public:
   ObjectCouting();
   ~ObjectCouting();

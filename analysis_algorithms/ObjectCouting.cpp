@@ -45,7 +45,7 @@ namespace FAV1
   }*/
 }
 
-ObjectCouting::ObjectCouting(): firstTime(true), showOutput(true), key(0), countAB(0), countBA(0), showAB(0)
+ObjectCouting::ObjectCouting(): firstTime(true), showOutput(true), key(0), countAB(0), countBA(0), showAB(0), serverApi{}
 {
   std::cout << "VehicleCouting()" << std::endl;
 }
@@ -200,11 +200,16 @@ void ObjectCouting::process()
         if(current_position != old_position)
         {
           if(old_position == ObjectPosition::VP_A && current_position == ObjectPosition::VP_B)
-            countAB++;
+          {
+              countAB++;
+              serverApi.updateLatLongBus(3, countBA, countBA, countAB, countAB);
+          }
 
           if(old_position == ObjectPosition::VP_B && current_position == ObjectPosition::VP_A)
-            countBA++;
-
+          {
+              serverApi.updateLatLongBus(3, countBA, countBA, countAB, countAB);
+              countBA++;
+          }
           positions.erase(positions.find(id));
         }
       }
@@ -272,7 +277,7 @@ void ObjectCouting::process()
 
   if(showAB == 0)
   {
-    putText(img_input, countABstr, cv::Point(10, img_h - 20), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 100, 0));
+    putText(img_input, countABstr, cv::Point(10, img_h - 60), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 100, 0));
     putText(img_input, countBAstr, cv::Point(10, img_h - 8), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 100, 0));
   }
   
