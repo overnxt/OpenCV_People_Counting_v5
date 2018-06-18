@@ -18,6 +18,8 @@ using cv::putText;
 using cv::line;
 using cv::circle;
 using cv::waitKey;
+using cv::Point;
+using cv::Scalar;
 enum class LaneOrientation
 {
   LO_NONE       = 0,
