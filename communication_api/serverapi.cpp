@@ -7,7 +7,8 @@ ServerApi::ServerApi()
       networkManager{new QNetworkAccessManager(this)},
       networkRepliesHashMap{new QHash<QString, QNetworkReply*>()},
       networkRepliesMapper{new QSignalMapper(this)},
-      repliesCount{}
+      repliesCount{},
+      apiUpdateBusLatLong{"/api/v1/updateBusPosition"}
 {
     QObject::connect(networkRepliesMapper, SIGNAL(mapped(QString)), this, SLOT(handleLogin(QString)));
 }
@@ -20,7 +21,7 @@ void ServerApi::updateLatLongBus(int busID, int peopleIn1, int peopleIn2, int pe
     postData.append(QString("peopleOut2=%1&").arg(peopleOu2));
     postData.append(QString("peopleIn1=%1&").arg(peopleIn1));
     postData.append(QString("peopleIn2=%1").arg(peopleIn2));
-    QNetworkRequest requset(QUrl(hostName + QString("/api/v1/updateBusPosition")));
+    QNetworkRequest requset(QUrl(hostName + apiUpdateBusLatLong));
     requset.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
     QNetworkReply* reply{networkManager->post(requset, postData)};
     QString replyID{QString::number(++repliesCount)};
