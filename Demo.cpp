@@ -14,21 +14,22 @@ using cv::bgsegm::BackgroundSubtractorMOG;
 using cv::bgsegm::createBackgroundSubtractorMOG;
 using std::make_unique;
 using std::unique_ptr;
+using std::cerr;
 int main(int argc, char* argv[])
 {
     QCoreApplication app(argc, argv);
     for (int i{}; i < argc; i++)
-        std::cout << argv[i] << std::endl;
-    std::cout << "Using OpenCV " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_SUBMINOR_VERSION << std::endl;
-
+        cout << argv[i] << std::endl;
+    cout << "OpenCV version: " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_SUBMINOR_VERSION << std::endl;
+    cout << "Qt version: " << QT_VERSION_STR << endl;
     /* Open video file */
     VideoCapture systemCapture;
     systemCapture.open(argv[1]);
-    /*capture = cvCaptureFromAVI(argv[1]);
-    if (!capture) {
-        std::cerr << "Cannot open video!" << std::endl;
+    if (!systemCapture.isOpened())
+    {
+        cerr << "Cannot open video or camera ";
         return 1;
-    }*/
+    }
 
     /* Background Subtraction Algorithm */
     //unique_ptr<IBGS> bgs{ make_unique<PixelBasedAdaptiveSegmenter>() };
@@ -73,9 +74,6 @@ int main(int argc, char* argv[])
         if (cv::waitKey(24) == 'q')
             break;
     }
-
     cvDestroyAllWindows();
     //cvReleaseCapture(&capture);
-    return app.exec();
-    return 0;
 }
