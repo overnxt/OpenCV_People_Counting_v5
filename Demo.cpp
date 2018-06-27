@@ -24,7 +24,11 @@ int main(int argc, char* argv[])
     cout << "Qt version: " << QT_VERSION_STR << endl;
     /* Open video file */
     VideoCapture systemCapture;
-    systemCapture.open(argv[1]);
+    QString captureSource{argv[1]};
+    if (captureSource == "video")
+        systemCapture.open(argv[2]);
+    else if (captureSource == "camera")
+        systemCapture.open(QString(argv[2]).toInt());
     if (!systemCapture.isOpened())
     {
         cerr << "Cannot open video or camera ";
