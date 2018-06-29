@@ -5,12 +5,12 @@
 #include <iostream>
 #include <memory>
 #include <opencv2/bgsegm.hpp>
-#include <opencv2/opencv.hpp>
 #include <QCoreApplication>
 using cv::BackgroundSubtractor;
 using cv::VideoCapture;
 using cv::Ptr;
 using cv::bgsegm::BackgroundSubtractorMOG;
+using cv::namedWindow;
 using cv::bgsegm::createBackgroundSubtractorMOG;
 using std::make_unique;
 using std::unique_ptr;
@@ -28,7 +28,11 @@ int main(int argc, char* argv[])
     if (captureSource == "video")
         systemCapture.open(argv[2]);
     else if (captureSource == "camera")
+    {
         systemCapture.open(QString(argv[2]).toInt());
+        systemCapture.set(cv::CAP_PROP_FRAME_WIDTH, 640.0);
+        systemCapture.set(cv::CAP_PROP_FRAME_HEIGHT, 480.0);
+    }
     if (!systemCapture.isOpened())
     {
         cerr << "Cannot open video or camera ";
@@ -48,6 +52,8 @@ int main(int argc, char* argv[])
 
     Ptr<BackgroundSubtractorMOG> backgroundSuctractor{createBackgroundSubtractorMOG(200, 5, 0.7, 15)};
     Mat img_input{};
+    //namedWindow("BGS", cv::WINDOW_NORMAL);
+    int captureFPS{static_cast<int>(systemCapture.get(cv::CAP_PROP_FPS))};
     while (1)
     {
         //frame = cvQueryFrame(capture);
@@ -75,7 +81,7 @@ int main(int argc, char* argv[])
             vehicleCouting->process();
         }
         // Press q to quit the program
-        if (cv::waitKey(24) == 'q')
+        if (cv::waitKey(captureFPS) == 'q')
             break;
     }
     cvDestroyAllWindows();
