@@ -47,12 +47,14 @@ namespace FAV1
 
 ObjectCouting::ObjectCouting(): firstTime(true), showOutput(true), key(0), countAB(0), countBA(0), showAB(0), serverApi{}
 {
-  std::cout << "ObjectCouting()" << std::endl;
+    //cv::namedWindow("Object Counting", cv::WINDOW_NORMAL);
+    std::cout << "ObjectCouting()" << std::endl;
 }
 
 ObjectCouting::~ObjectCouting()
 {
-  std::cout << "~ObjectCouting()" << std::endl;
+    std::cout << "Total A->B: " << countAB << " | Total B->A: " << countBA << endl;
+    std::cout << "~ObjectCouting()" << std::endl;
 }
 
 void ObjectCouting::setInput(const Mat &imgInput)
@@ -288,7 +290,7 @@ void ObjectCouting::process()
     putText(img_input, countBAstr, Point(10, img_h - 8), cv::FONT_HERSHEY_DUPLEX, 1, Scalar(0, 100, 0));
 
   if(showOutput)
-    imshow("VehicleCouting", img_input);
+    imshow("Object Counting", img_input);
 
   if(firstTime)
     saveConfig();
