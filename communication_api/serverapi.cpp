@@ -1,7 +1,7 @@
 #include "serverapi.h"
 
-ServerApi::ServerApi()
-    : hostName{"http://localhost"},
+ServerApi::ServerApi(QString hostname)
+    : hostName{QString("http://%1").arg(hostname)},
       userName{"manager"},
       password{"smb2017"},
       networkManager{new QNetworkAccessManager(this)},

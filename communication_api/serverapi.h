@@ -25,7 +25,7 @@ private:
     int repliesCount;
     QString apiUpdateBusLatLong;
 public:
-    ServerApi();
+    ServerApi(QString hostname = "localhost");
     void updateLatLongBus(int busID, int peopleIn1, int peopleIn2, int peopleOu1, int peopleOu2);
 
 public slots:
