@@ -22,6 +22,13 @@ int main(int argc, char* argv[])
         cout << argv[i] << std::endl;
     cout << "OpenCV version: " << CV_MAJOR_VERSION << "." << CV_MINOR_VERSION << "." << CV_SUBMINOR_VERSION << std::endl;
     cout << "Qt version: " << QT_VERSION_STR << endl;
+
+    //
+    if (argc < 4)
+    {
+        cout << "Input Error" << endl;
+        return 1;
+    }
     /* Open video file */
     VideoCapture systemCapture;
     QString captureSource{argv[1]};
@@ -37,8 +44,7 @@ int main(int argc, char* argv[])
     {
         cerr << "Cannot open video or camera ";
         return 1;
-    }
-
+    }    
     /* Background Subtraction Algorithm */
     //unique_ptr<IBGS> bgs{ make_unique<PixelBasedAdaptiveSegmenter>() };
     /* Blob Tracking Algorithm */
@@ -46,7 +52,7 @@ int main(int argc, char* argv[])
     unique_ptr<BlobTracking> blobTracking{ make_unique<BlobTracking>() };
 
     /* Vehicle Counting Algorithm */
-    unique_ptr<ObjectCouting> vehicleCouting{ make_unique<ObjectCouting>() };
+    unique_ptr<ObjectCouting> vehicleCouting{ make_unique<ObjectCouting>(QString(argv[2])) };
 
     std::cout << "Press 'q' to quit..." << std::endl;
 
