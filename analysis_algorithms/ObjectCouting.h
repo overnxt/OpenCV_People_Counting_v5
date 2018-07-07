@@ -52,7 +52,7 @@ private:
   int showAB;
   ServerApi serverApi;
 public:
-  ObjectCouting();
+  ObjectCouting(QString hostname = "localhost");
   ~ObjectCouting();
 
   void setInput(const Mat &imgInput);

@@ -45,7 +45,7 @@ namespace FAV1
   }*/
 }
 
-ObjectCouting::ObjectCouting(): firstTime(true), showOutput(true), key(0), countAB(0), countBA(0), showAB(0), serverApi{}
+ObjectCouting::ObjectCouting(QString hostname): firstTime(true), showOutput(true), key(0), countAB(0), countBA(0), showAB(0), serverApi{hostname}
 {
     //cv::namedWindow("Object Counting", cv::WINDOW_NORMAL);
     std::cout << "ObjectCouting()" << std::endl;
