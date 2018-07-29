@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
     unique_ptr<BlobTracking> blobTracking{ make_unique<BlobTracking>() };
 
     /* Vehicle Counting Algorithm */
-    unique_ptr<ObjectCouting> vehicleCouting{ make_unique<ObjectCouting>(QString(argv[2])) };
+    unique_ptr<ObjectCouting> vehicleCouting{ make_unique<ObjectCouting>(QString(argv[3])) };
 
     std::cout << "Press 'q' to quit..." << std::endl;
 
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
         if (img_input.empty())
             break;
         //cv::Mat img_input = cv::cvarrToMat(frame);
-        //cv::imshow("Input", img_input);
+        cv::imshow("Input", img_input);
 
         // bgs->process(...) internally process and show the foreground mask image
         cv::Mat img_output;

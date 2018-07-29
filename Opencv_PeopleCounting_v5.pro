@@ -38,3 +38,5 @@ HEADERS += \
     communication_api/serverapi.h
 PKGCONFIG += opencv3
 CONFIG += link_pkgconfig
+
+#INCLUDEPATH += analysis_algorithms
