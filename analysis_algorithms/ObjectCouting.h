@@ -60,7 +60,7 @@ public:
   void process();
 
 private:
-  ObjectPosition getVehiclePosition(const CvPoint2D64f centroid);
+  ObjectPosition getObjectPosition(const CvPoint2D64f centroid);
 
   void saveConfig();
   void loadConfig();

@@ -68,7 +68,7 @@ void ObjectCouting::setTracks(const cvb::CvTracks &srcTracks)
   tracks = srcTracks;
 }
 
-ObjectPosition ObjectCouting::getVehiclePosition(const CvPoint2D64f centroid)
+ObjectPosition ObjectCouting::getObjectPosition(const CvPoint2D64f centroid)
 {
   ObjectPosition vehiclePosition = ObjectPosition::VP_NONE;
 
@@ -197,7 +197,7 @@ void ObjectCouting::process()
         map<cvb::CvID, ObjectPosition>::iterator it2 = positions.find(id);
         ObjectPosition old_position = it2->second;
 
-        ObjectPosition current_position = getVehiclePosition(centroid);
+        ObjectPosition current_position = getObjectPosition(centroid);
 
         if(current_position != old_position)
         {
@@ -217,7 +217,7 @@ void ObjectCouting::process()
       }
       else
       {
-        ObjectPosition vehiclePosition = getVehiclePosition(centroid);
+        ObjectPosition vehiclePosition = getObjectPosition(centroid);
 
         if(vehiclePosition != ObjectPosition::VP_NONE)
           positions.insert(std::pair<cvb::CvID, ObjectPosition>(id,vehiclePosition));
