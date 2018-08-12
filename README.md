@@ -6,4 +6,16 @@ I have used his source code as a base structure for my project and added some fe
  - Use smart pointers instead of opencv pointers :))
  - Add preprocessor for header files
  - Replace his Background Subtraction Algorithm with Opencv Background Subtraction Algorithm: MOG (opencv_contrib module) (This alogrithm works perfectly on my Raspberry Pi 3)
- 
+## Dependencies
+ - OpenCV 3 with extra modules from https://github.com/opencv/opencv and https://github.com/opencv/opencv_contrib 
+ - Basic requirement for building C++ Modern Applications (Considering GNU G++ version that supports C++11/14 feature):
+	1. Debian/Ubuntu (apt-get): sudo apt-get install build-essential libgl1-mesa-dev
+	2. Fedora/RHEL/CentOS (yum): sudo yum groupinstall "C Development Tools and Libraries" 
+				     sudo yum install mesa-libGL-devel
+ - Qt libraries : qt5-default (for qmake and common libqt5), libqt5core5, libqt5network5
+## Build commands
+ - qmake
+ - make
+## Screenshots
+![](screenshots/Screenshot_20180812_120441.png)
+![](screenshots/Screenshot_20180812_120515.png)
