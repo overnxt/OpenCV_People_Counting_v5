@@ -70,20 +70,20 @@ void ObjectCouting::setTracks(const cvb::CvTracks &srcTracks)
 
 ObjectPosition ObjectCouting::getObjectPosition(const CvPoint2D64f centroid)
 {
-  ObjectPosition vehiclePosition = ObjectPosition::VP_NONE;
+  ObjectPosition objectPosition = ObjectPosition::VP_NONE;
 
   if(laneOrientation == LaneOrientation::LO_HORIZONTAL)
   {
     if(centroid.x < FAV1::roi_x0)
     {
       putText(img_input, "STATE: A", Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255));
-      vehiclePosition = ObjectPosition::VP_A;
+      objectPosition = ObjectPosition::VP_A;
     }
     
     if(centroid.x > FAV1::roi_x0)
     {
       putText(img_input, "STATE: B", Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255));
-      vehiclePosition = ObjectPosition::VP_B;
+      objectPosition = ObjectPosition::VP_B;
     }
   }
 
@@ -92,17 +92,17 @@ ObjectPosition ObjectCouting::getObjectPosition(const CvPoint2D64f centroid)
     if(centroid.y > FAV1::roi_y0)
     {
       putText(img_input, "STATE: A", Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255));
-      vehiclePosition = ObjectPosition::VP_A;
+      objectPosition = ObjectPosition::VP_A;
     }
     
     if(centroid.y < FAV1::roi_y0)
     {
       putText(img_input, "STATE: B", Point(10,img_h/2), cv::FONT_HERSHEY_PLAIN, 1, Scalar(255,255,255));
-      vehiclePosition = ObjectPosition::VP_B;
+      objectPosition = ObjectPosition::VP_B;
     }
   }
 
-  return vehiclePosition;
+  return objectPosition;
 }
 
 void ObjectCouting::process()
