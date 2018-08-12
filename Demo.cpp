@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
     unique_ptr<BlobTracking> blobTracking{ make_unique<BlobTracking>() };
 
     /* Vehicle Counting Algorithm */
-    unique_ptr<ObjectCouting> vehicleCouting{ make_unique<ObjectCouting>(QString(argv[3])) };
+    unique_ptr<ObjectCouting> objectCouting{ make_unique<ObjectCouting>(QString(argv[3])) };
 
     std::cout << "Press 'q' to quit..." << std::endl;
 
@@ -62,18 +62,14 @@ int main(int argc, char* argv[])
     int captureFPS{static_cast<int>(systemCapture.get(cv::CAP_PROP_FPS))};
     while (1)
     {
-        //frame = cvQueryFrame(capture);
-        //if (!frame)
-        //    break;
         systemCapture >> img_input;
         if (img_input.empty())
             break;
-        //cv::Mat img_input = cv::cvarrToMat(frame);
-        cv::imshow("Input", img_input);
 
-        // bgs->process(...) internally process and show the foreground mask image
-        cv::Mat img_output;
+        cv::imshow("Input", img_input);
+        //bgs->process(...) internally process and show the foreground mask image
         //bgs->process(img_input, img_mask);
+        cv::Mat img_output;
         backgroundSuctractor->apply(img_input, img_output);
         cv::imshow("BGS", img_output);
         if (!img_output.empty())
@@ -81,10 +77,10 @@ int main(int argc, char* argv[])
             // Perform blob tracking
             blobTracking->process(img_input, img_output, img_blob);
 
-            // Perform vehicle counting
-            vehicleCouting->setInput(img_blob);
-            vehicleCouting->setTracks(blobTracking->getTracks());
-            vehicleCouting->process();
+            // Perform  counting
+            objectCouting->setInput(img_blob);
+            objectCouting->setTracks(blobTracking->getTracks());
+            objectCouting->process();
         }
         // Press q to quit the program
         if (cv::waitKey(captureFPS) == 'q')
