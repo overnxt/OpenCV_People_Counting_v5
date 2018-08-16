@@ -13,6 +13,8 @@
 #include "../communication_api/serverapi.h"
 using std::vector;
 using std::map;
+using std::cout;
+using std::endl;
 using cv::Mat;
 using cv::putText;
 using cv::line;

@@ -12,37 +12,6 @@ namespace FAV1
   int startDraw = 0;
   bool roi_defined = false;
   bool use_roi = true;
-  /*void VehicleCouting_on_mouse(int evt, int x, int y, int flag, void* param)
-  {
-    if(!use_roi)
-      return;
-  
-    if(evt == CV_EVENT_LBUTTONDOWN)
-    {
-      if(!startDraw)
-      {
-        roi_x0 = x;
-        roi_y0 = y;
-        startDraw = 1;
-      }
-      else
-      {
-        roi_x1 = x;
-        roi_y1 = y;
-        startDraw = 0;
-        roi_defined = true;
-      }
-    }
-
-    if(evt == CV_EVENT_MOUSEMOVE && startDraw)
-    {
-      //redraw ROI selection
-      img_input2 = cvCloneImage(img_input1);
-      cvLine(img_input2, cvPoint(roi_x0,roi_y0), cvPoint(x,y), CV_RGB(255,0,255));
-      cvShowImage("VehicleCouting", img_input2);
-      cvReleaseImage(&img_input2);
-    }
-  }*/
 }
 
 ObjectCouting::ObjectCouting(QString hostname): firstTime(true), showOutput(true), key(0), countAB(0), countBA(0), showAB(0), serverApi{hostname}
@@ -122,7 +91,7 @@ void ObjectCouting::process()
     do
     {
       putText(img_input, "Please, set the counting line", cv::Point(10,15), cv::FONT_HERSHEY_PLAIN, 1, Scalar(0,0,255));
-      imshow("Object Couting", img_input);
+      //imshow("Object Couting", img_input);
       //FAV1::img_input1 = new IplImage(img_input);
       //cvSetMouseCallback("VehicleCouting", FAV1::VehicleCouting_on_mouse, NULL);
       //key = waitKey(0);
@@ -204,13 +173,15 @@ void ObjectCouting::process()
           if(old_position == ObjectPosition::VP_A && current_position == ObjectPosition::VP_B)
           {
               countAB++;
+              qDebug() << "Passenger form A->B: " << countAB;
               serverApi.updateLatLongBus(3, countBA, countBA, countAB, countAB);
           }
 
           if(old_position == ObjectPosition::VP_B && current_position == ObjectPosition::VP_A)
           {
-              serverApi.updateLatLongBus(3, countBA, countBA, countAB, countAB);
               countBA++;
+              qDebug() << "Passenger form B->A: " << countBA;
+              serverApi.updateLatLongBus(3, countBA, countBA, countAB, countAB);
           }
           positions.erase(positions.find(id));
         }
