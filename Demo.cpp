@@ -66,12 +66,12 @@ int main(int argc, char* argv[])
         if (img_input.empty())
             break;
 
-        cv::imshow("Input", img_input);
+        //cv::imshow("Input", img_input);
         //bgs->process(...) internally process and show the foreground mask image
         //bgs->process(img_input, img_mask);
         cv::Mat img_output;
         backgroundSuctractor->apply(img_input, img_output);
-        cv::imshow("BGS", img_output);
+        //cv::imshow("BGS", img_output);
         if (!img_output.empty())
         {
             // Perform blob tracking
